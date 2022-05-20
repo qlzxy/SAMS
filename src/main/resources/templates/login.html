@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+    <title>登陆</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+    <style>
+		*{margin: 0px;padding: 0px;}
+        .layui-container {width: 100%;}
+        .admin-login-background {width:360px;height:360px;}
+        .logo-title {text-align:center;letter-spacing:2px;padding:14px 0;}
+        .logo-title h1 {color:#009688;font-size:25px;font-weight:bold;}
+        .login-form .layui-form-item {position:relative;}
+        .login-form .layui-form-item label {position:absolute;left:1px;top:1px;width:38px;line-height:36px;text-align:center;color:#d2d2d2;}
+        .login-form .layui-form-item input {padding-left:36px;}
+        .captcha {width:60%;display:inline-block;}
+        .captcha-img {display:inline-block;width:34%;float:right;}
+        .captcha-img img {height:34px;border:1px solid #e6e6e6;height:36px;width:100%;}
+		#forget{position: relative;top: 6.5px;left: 160px;text-decoration: underline;}
+    </style>
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/captcha.js}"></script>
+</head>
+<body>
+<div class="layui-container">
+    <div class="admin-login-background">
+        <div class="layui-form login-form">
+            <form class="layui-form" th:action="@{/select/login}" method="post" id="form" target="_parent">
+                <div class="layui-form-item logo-title">
+                    <h1>登录</h1>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-username" for="id"></label>
+                    <input type="text" id="id" name="id" required placeholder="请输入学工号" autocomplete="off" class="layui-input" value="111">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-password" for="password"></label>
+                    <input type="password" id="password" name="password" required placeholder="请输入密码" autocomplete="off" class="layui-input" value="123456">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-icon layui-icon-vercode" for="captcha"></label>
+                    <input type="text" id="captcha" required placeholder="请输入验证码" autocomplete="off" class="layui-input verification captcha input-val" >
+                    <div class="captcha-img">
+                        <canvas id="canvas" style="height: 38px;width: 100px;"></canvas>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <input type="checkbox" name="rememberMe" value="true" lay-skin="primary" title="记住我"><a href="/return" id="forget" target="_blank">忘记密码</a>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn  layui-btn-fluid" id="login" type="button">登陆</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+	layui.use('form', function(){
+	  var form = layui.form;
+	  var $ = layui.jquery, layer = layui.layer;
+	});
+</script>
+</body>
+</html>

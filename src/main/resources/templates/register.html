@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>注册</title>
+<link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+	<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<style>
+	*{margin: 0px;padding: 0px;}
+	i{color: red;}
+	img{height: 20px;width: 20px;}
+	.layui-container {width: 100%;}
+	.admin-register-background {width:500px;height:600px;}
+	.logo-title {text-align:center;letter-spacing:2px;padding:14px 0;}
+	.logo-title h1 {color:#009688;font-size:25px;font-weight:bold;}
+</style>
+</head>
+<body>
+	<div class="layui-container">
+	    <div class="admin-register-background">
+	        <div class="layui-form ">
+			<form class="layui-form" method="post" th:action="@{/insert/admin}" id="form">
+			  <div class="layui-form-item logo-title">
+				<h1>注册</h1>
+			  </div>
+			  <div class="layui-form-item">
+				<label class="layui-form-label">邀请码<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input required type="text" name="invite_code" id="invite_code" placeholder="请输入邀请码" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="invite_code-img" src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+				<label class="layui-form-label">编号<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input required type="text" name="admin_id" id="admin_id" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="admin_id-img" src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+			  <label class="layui-form-label">密码<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input required type="password" name="admin_password" id="admin_password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="admin_password-img" src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+			  <label class="layui-form-label">确认密码<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input required type="password" name="re_admin_password" id="re_admin_password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="re_admin_password-img"  src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+			  <div class="layui-inline">
+					<label class="layui-form-label">安全问题<i>*</i></label>
+					<div class="layui-input-inline">
+					  <select name="security_question" id="security_question" >
+						<option value="">请选择问题</option>
+						<optgroup label="家庭信息">
+						  <option value="你父亲的名字">你父亲的名字</option>
+						  <option value="你母亲的名字">你母亲的名字</option>
+						  <option value="你父亲的电话">你父亲的电话</option>
+						  <option value="你母亲的电话">你母亲的电话</option>
+						</optgroup>
+						<optgroup label="学生时代">
+						  <option value="你的工号">你的工号</option>
+						  <option value="你的母校名称">你的母校名称</option>
+						  <option value="你的专业">你的专业</option>
+						  <option value="你班主任的名字">你班主任的名字</option>
+						</optgroup>
+						<optgroup label="兴趣爱好">
+							<option value="你最喜欢的动漫">你最喜欢的动漫</option>
+							<option value="你最喜欢的运动">你最喜欢的运动</option>
+							<option value="你最喜欢的游戏">你最喜欢的游戏</option>
+							<option value="你最喜欢的歌手">你最喜欢的歌手</option>
+							<option value="你最喜欢的演员">你最喜欢的演员</option>
+						</optgroup>
+					  </select>
+					</div>
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label"></label>
+				<div class="layui-input-inline">
+				  <input required type="text" name="security_answer" id="security_answer" placeholder="请输入你的答案" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="security_answer-img" src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+			  <label class="layui-form-label">邮箱<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input required type="text" name="admin_email" id="admin_email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+				</div>
+				<label class="layui-form-label"><img id="admin_email-img"  src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+				<label class="layui-form-label">性别<i>*</i></label>
+				<div class="layui-input-inline">
+				  <input type="radio" name="admin_sex"  value="男" title="男" checked>
+				  <input type="radio" name="admin_sex" value="女" title="女">
+				</div>
+				<label class="layui-form-label"><img id="admin_sex-img" src="/img/null.png"></label>
+			  </div>
+			  <div class="layui-form-item">
+				<div class="layui-input-block">
+				  <button class="layui-btn" id="register" type="button">立即提交</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+layui.use('form', function(){
+	var form = layui.form;
+});
+
+</script>
+<script th:src="@{/js/register.js}"></script>
+<script th:inline="javascript">
+	var message=[[${message}]];
+	if(message!=null&&message!="") {
+		if (message == "注册成功") {
+			alert(message);
+			window.parent.location.href = "/";
+		}
+	}
+</script>
+</body>
+</html>

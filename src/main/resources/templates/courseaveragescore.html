@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html style="height: 100%" xmlns:th="http://www.thymeleaf.org">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 60%"></div>
+       <script type="text/javascript"th:src="@{/js/jquery-3.4.1.min.js}"></script>
+       <script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+       <script type="text/javascript">
+            var dom = document.getElementById("container");
+            var myChart = echarts.init(dom);
+            var app = {};
+            option = null;
+            option = {
+                title:{
+                    text:"各科成绩的平均值"
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['语文', '数学', '英语', '物理', '化学', '生物', '政治','历史', '地理']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: "成绩分数",
+                    data: [110.1, 123.5, 111, 89, 77, 88.2, 74,66, 77, 90.3],
+                    type: 'line',
+                    smooth: true
+                }]
+            };
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+       </script>
+   <script>
+       $(function () {
+           setTimeout(function () {
+               $.get("/select/courseAverageScore",function (data) {
+                   if(data!="error"){
+                       var newData = JSON.parse(data);
+                       var arr=new Array();
+                       $.each(newData, function(i, p){
+                           arr[i]=p.sum_score;
+                       });
+                       myChart.setOption({
+                           series: [{
+                               data: arr,
+                               type: 'line',
+                               smooth: true
+                           }]
+                       });
+                   }else{
+                       alert("数据请求出错");
+                   }
+               });
+           });
+       });
+   </script>
+   </body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" >
+    <style>
+        *{margin: 0px;padding: 0px;}
+        html,body{height: 100%;width: 100%;}
+        .h{background: #f0f0f0;}
+        .b{background: #fff}
+        #top{width: 98%;margin: 0px auto;line-height: 50px;}
+        #box{width: 98%;margin: 0px auto;}
+        #box #class{width: 100%;}
+        #box #class tr{height: 40px;line-height: 40px;text-align: center;}
+        #box #class tr:hover{transition: 0.8s;background: #f0f0f0;}
+        #add-box{width: 100%;height: 100%;background: #fff;position: absolute;z-index: 10;display: none;top:0px;}
+        #add-box .close-icon {border: #ccc solid 0.5px;border-radius: 2px;position: absolute;top: 0px;right: 0px;width: 30px;height: 30px;line-height: 30px;font-size: 30px;text-align: center;}
+        #add-box .close-icon:hover{color: #fff;background: red;border: red solid 0.5px;}
+        #add-box .layui-input-block{width: 40%;}
+        #edit-box{width: 100%;height: 100%;background: #fff;position: absolute;z-index: 10;display: none;top:0px;}
+        #edit-box .close-icon {border: #ccc solid 0.5px;border-radius: 2px;position: absolute;top: 0px;right: 0px;width: 30px;height: 30px;line-height: 30px;font-size: 30px;text-align: center;}
+        #edit-box .close-icon:hover{color: #fff;background: red;border: red solid 0.5px;}
+        #edit-box .layui-input-block{width: 40%;}
+        #class-excel{display: none;}
+        #add_class_id{width: 100%;height: 38px;padding-left: 9px;border: #e6e6e6 solid 0.5px;border-radius: 2px;}
+        #add_class_name{width: 50%;height: 38px;padding-left: 9px;border: #e6e6e6 solid 0.5px;border-radius: 2px;}
+        #foot{width: 98%;margin: 0px auto;line-height: 50px;}
+    </style>
+</head>
+<body>
+<div id="top">
+    <div class="layuimini-container">
+        <div class="layuimini-main">
+            <fieldset class="table-search-fieldset">
+                <legend>搜索信息</legend>
+                    <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">班级编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="search_class_id" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">编辑名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="search_class_name" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button id="search-id-name" class="layui-btn layui-btn-primary"  ><i class="layui-icon "></i> 搜 索</button>
+                    </div>
+                    </div>
+            </fieldset>
+        </div>
+    </div>
+    <div >
+        <input th:if="${session.role eq 'admin'}" type="button" id="class-add" class="layui-btn layui-btn-sm" value="添加" />
+        <input th:if="${session.role eq 'admin'}" type="button" id="class-del" class="layui-btn layui-btn-sm" value="删除" />
+        <input th:if="${session.role eq 'admin'}" type="button" id="class-import" class="layui-btn layui-btn-sm" value="导入excel" />
+            <input type="button" id="class-export" class="layui-btn layui-btn-sm" value="导出excel" />
+        <form id="form" th:method="post" th:action="@{/excel/classImport}" enctype="multipart/form-data">
+            <input th:type="file" th:name="file" id="class-excel"/>
+        </form>
+    </div>
+</div>
+<div id="box">
+    <table id="class" rules="all" frame="box">
+        <tr style="background: #eee;">
+            <th><input type="checkbox" id="th"/> </th>
+            <th>班级编号</th>
+            <th>班级名称</th>
+            <th>学生人数</th>
+            <th>教师人数</th>
+            <th th:if="${session.role eq 'admin'}">操作</th>
+        </tr>
+        <tr th:class="${status.even}?'h':'b'" th:each="p,status:${pageInfo.list}">
+            <td class="i"><input type="checkbox" class="td" name="td" th:value="${p.class_id}"/></td>
+            <td th:text="${p.class_id}"></td>
+            <td th:text="${p.class_name}"></td>
+            <td th:text="${p.student_num}"></td>
+            <td th:text="${p.teacher_num}"></td>
+            <td th:if="${session.role eq 'admin'}"><input type="button" value="编辑"  class="class-edit layui-btn layui-btn-sm"/></td>
+        </tr>
+    </table>
+</div>
+<div id="add-box">
+    <form method="post"  th:action="@{/insert/addclass/{role}(role=${session.role})}" id="add-form">
+    <div class="close-icon">×</div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级编号</label>
+        <div class="layui-input-block">
+            <input type="text" id="add_class_id" name="add_class_id" placeholder="请输入班级编号" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级名称</label>
+        <div class="layui-input-block">
+            <input id="add_class_name" name="add_class_name" class="layui-input" type="text" placeholder="请输入班级名称" autocomplete="off" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">学生人数</label>
+        <div class="layui-input-block">
+            <input id="add_student_num" name="add_student_num" class="layui-input" type="text" placeholder="请输入班级人数" autocomplete="off" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">教师人数</label>
+        <div class="layui-input-block">
+            <input id="add_teacher_num" name="add_teacher_num" class="layui-input" type="text" placeholder="请输入班级人数" autocomplete="off" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <input id="add-submit" value="添加" type="button" class="layui-btn " />
+        </div>
+    </div>
+    </form>
+</div>
+<div id="edit-box" >
+    <form method="post" th:action="@{/update/editclass/{role}(role=${session.role})}">
+        <div class="close-icon">×</div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级编号</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit_class_id" name="edit_class_id" class="layui-input" readonly="readonly" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级名称</label>
+            <div class="layui-input-block">
+                <input id="edit_class_name" name="edit_class_name" class="layui-input" type="text" placeholder="请输入班级名称" autocomplete="off" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学生人数</label>
+            <div class="layui-input-block">
+                <input id="edit_student_num" name="edit_student_num" class="layui-input" type="text" placeholder="请输入班级人数" autocomplete="off" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师人数</label>
+            <div class="layui-input-block">
+                <input id="edit_teacher_num" name="edit_teacher_num" class="layui-input" type="text" placeholder="请输入班级人数" autocomplete="off" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <input id="edit-submit" type="submit" class="layui-btn " value="保存"/>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="foot">
+    <span>总共<i th:text="${pageInfo.getTotal()}" style="color: #009688;font-weight: 700"></i>条记录</span>
+    <span>共<i th:text="${pageInfo.getPages()}" style="color: #009688;font-weight: 700"></i>页</span>
+    <span>当前是第<i th:text="${pageInfo.getPageNum()}" style="color: #009688;font-weight: 700"></i>页</span>
+    <input type="button" id="f-page" class="layui-btn layui-btn-sm" value="首页" />
+    <input type="button" id="u-page" class="layui-btn layui-btn-sm" value="上一页" />
+    <input type="button" id="n-page" class="layui-btn layui-btn-sm" value="下一页" />
+    <input type="button" id="e-page" class="layui-btn layui-btn-sm" value="尾页" />
+</div>
+<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+
+    });
+</script>
+<script th:src="@{/js/class.js}"></script>
+<script th:inline="javascript">
+    var page=[[${pageInfo.getPageNum()}]];
+    var pages=[[${pageInfo.getPages()}]];
+    var message=[[${message}]];
+    var role=[[${session.role}]];
+    var class_id=[[${id}]];
+    var class_name=[[${name}]];
+    if(class_id!=null&&class_id!=""){
+        $("#search_class_id").val(class_id);
+    }
+    if(class_name!=null&&class_name!=""){
+        $("#search_class_name").val(class_name);
+    }
+</script>
+</body>
+</html>
