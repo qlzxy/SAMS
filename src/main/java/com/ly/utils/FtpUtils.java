@@ -6,15 +6,9 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
-import javax.swing.*;
 import java.io.*;
 
-/**
- * @author qlz小羽 YFileSystem
- * @create 2022-02-09 16:31
- */
 @Component
 public class FtpUtils{
 

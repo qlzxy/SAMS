@@ -3,19 +3,16 @@ package com.ly.bean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-/**
- * @author qlz小羽 YFileSystem
- * @create 2022-02-09 16:29
- */
 @Component
-@ConfigurationProperties(prefix = "ftp")//ConfigurationProperties和Component必须一起使用
+@ConfigurationProperties(prefix = "ftp")
+//ConfigurationProperties和Component必须一起使用
     public class Ftp {
-    private String hostname; // 机器的ip
-    private int port; // 端口号：21
-    private String username; // 账号
-    private String password; // 密码
-    private String savePath; // userfile存储的位置
-    private String reSavePath; // 匿名访问存储的位置
+    private String hostname;
+    private int port;
+    private String username;
+    private String password;
+    private String savePath;
+    private String reSavePath;
 
     public String getHostname() {
         return hostname;

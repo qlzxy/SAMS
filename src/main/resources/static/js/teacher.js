@@ -122,12 +122,16 @@ $(function () {
                 id+=$(this).val()+"s";
             }
         });
-        if(confirm("你确定要删除？！")){
-            if(prompt("请输入操作权限(管理员密码)")=="admin"){
-                window.location.href="/delete/teacher/"+id+"/"+role;
-            }else{
-                alert("权限错误无法删除")
+        if(id!=""){
+            if(confirm("你确定要删除？！")){
+                if(prompt("请输入操作权限(管理员密码)")=="admin"){
+                    window.location.href="/delete/teacher/"+id+"/"+role;
+                }else{
+                    alert("权限错误无法删除")
+                }
             }
+        }else{
+            alert("请勾选要删出的内容")
         }
 
     });

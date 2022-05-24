@@ -4,39 +4,65 @@ import com.ly.bean.*;
 import com.ly.bean.Class;
 import com.ly.mapper.SelectMapper;
 import com.ly.mapper.UpdateMapper;
-import com.ly.mapper.UpdateSql;
-import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-10 16:45
- */
 @Service
 public class UpdateService {
     @Autowired
-    private UpdateMapper updateMapper;
-
-    public void updateStudent(Student student){
-        updateMapper.updateStudent(student);
+    private UpdateMapper um;
+    @Autowired
+    private SelectMapper sm;
+    @Autowired
+    private RedisTemplate<String,Object> rt;
+    public void updateStudent(Student s){
+        um.updateStudent(s);
+        String key = "student_"+s.getStudent_id();
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findByStudent(s.getStudent_id()));
+        }
     }
-    public void updateScore(Score score){
-        updateMapper.updateScore(score);
+    public void updateScore(Score s){
+        um.updateScore(s);
+        String key = "score_"+s.getStudent_id();;
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findScoreByIdStudentId(s.getScore_id()));
+        }
     }
-    public void updateCourse(Course course){
-        updateMapper.updateCourse(course);
+    public void updateCourse(Course c){
+        um.updateCourse(c);
+        String key = "course_"+c.getCourse_id();
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findByCourse(c.getCourse_id()));
+        }
     }
     public void updateClass(Class c){
-        updateMapper.updateClass(c);
+        um.updateClass(c);
+        String key = "class_"+c.getClass_id();
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findByClass(c.getClass_id()));
+        }
     }
-    public void updateTeacher(Teacher teacher){
-        updateMapper.updateTeacher(teacher);
+    public void updateTeacher(Teacher t){
+        um.updateTeacher(t);
+        String key = "teacher_"+t.getTeacher_id();
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findByTeacher(t.getTeacher_id()));
+        }
     }
-    public void updateAdmin(Admin admin){
-        updateMapper.updateAdmin(admin);
+    public void updateAdmin(Admin a){
+        um.updateAdmin(a);
+        String key = "admin_"+a.getAdmin_id();
+        ValueOperations o = rt.opsForValue();
+        if (rt.hasKey(key)) {
+            o.set(key, sm.findByAdmin(a.getAdmin_id()));
+        }
     }
 }

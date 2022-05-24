@@ -2,10 +2,6 @@ package com.ly.bean;
 
 import java.io.Serializable;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-11 16:36
- */
 public class Admin implements Serializable {
     private int admin_id;
     private String admin_sex;

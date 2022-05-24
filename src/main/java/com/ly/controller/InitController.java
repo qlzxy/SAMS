@@ -13,13 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-11 9:31
- */
 @Controller
 public class InitController {
 
@@ -57,7 +52,6 @@ public class InitController {
         }
         return "index";
     }
-
     @GetMapping("/main/{id}")
     public String main(@PathVariable("id") String id, ModelMap model,HttpServletRequest request){
         Admin byAdmin = selectService.findByAdmin(Integer.parseInt(id));
@@ -118,7 +112,6 @@ public class InitController {
     public String returnPassword(){
         return "return";
     }
-
     @RequestMapping("/changePassword/{id}/{role}")
     public String changePassword(@PathVariable("id") String id,@PathVariable("role") String role,Model model){
         model.addAttribute("id",id);

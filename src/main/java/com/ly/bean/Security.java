@@ -2,10 +2,6 @@ package com.ly.bean;
 
 import java.io.Serializable;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-12 9:23
- */
 public class Security implements Serializable {
     private int security_id;
     private int student_id;

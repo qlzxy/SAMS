@@ -6,26 +6,19 @@ import com.ly.bean.Class;
 import com.ly.service.SelectService;
 import com.ly.service.UpdateService;
 import com.ly.utils.FtpUtils;
+import com.ly.utils.DataTypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-11 15:44
- */
 @Controller
 @RequestMapping("/update")
 public class UpdateController {
@@ -34,9 +27,10 @@ public class UpdateController {
     private UpdateService updateService;
     @Autowired
     private SelectService selectService;
-
     @Autowired
     private Ftp ftp ;
+    @Autowired
+    private DataTypeUtils dtu;
     /**
      * 编辑学生成绩
      * @param request
@@ -179,59 +173,7 @@ public class UpdateController {
         return "course";
     }
 
-
-
-
-    @RequestMapping("/person/{role}")
-    public String person(@PathVariable("role") String role, @RequestParam("id") String id ,
-                         @RequestParam("name") String name , @RequestParam("sex") String sex ,
-                         @RequestParam("email") String email , ModelMap model,HttpServletRequest request){
-        String birth = request.getParameter("birth");
-        String phone = request.getParameter("phone");
-        if("admin".equals(role)){
-            Admin admin=new Admin();
-            admin.setAdmin_id(Integer.parseInt(id));
-            admin.setAdmin_sex(sex);
-            admin.setAdmin_email(email);
-            admin.setAdmin_name(name);
-            updateService.updateAdmin(admin);
-            model.addAttribute("modelrole","管理员");
-            model.addAttribute("img",selectService.findByAdmin(Integer.parseInt(id)).getAdmin_img());
-        }
-        if("teacher".equals(role)){
-            Teacher teacher=new Teacher();
-            teacher.setTeacher_name(name);
-            teacher.setTeacher_id(Integer.parseInt(id));
-            teacher.setTeacher_email(email);
-            teacher.setTeacher_birth(birth);
-            teacher.setTeacher_phone(phone);
-            teacher.setTeacher_sex(sex);
-            updateService.updateTeacher(teacher);
-            model.addAttribute("modelrole","教师");
-            model.addAttribute("img",selectService.findByTeacher(Integer.parseInt(id)).getTeacher_img());
-        }
-        if("student".equals(role)){
-            Student student=new Student();
-            student.setStudent_id(Integer.parseInt(id));
-            student.setStudent_name(name);
-            student.setStudent_email(email);
-            student.setStudent_birth(birth);
-            student.setStudent_phone(phone);
-            student.setStudent_sex(sex);
-            updateService.updateStudent(student);
-            model.addAttribute("modelrole","学生");
-            model.addAttribute("img",selectService.findByStudent(Integer.parseInt(id)).getStudent_img());
-        }
-        model.addAttribute("role",role);
-        model.addAttribute("id",Integer.parseInt(id));
-        model.addAttribute("name",name);
-        model.addAttribute("sex",sex);
-        model.addAttribute("email",email);
-        model.addAttribute("birth",birth);
-        model.addAttribute("phone",phone);
-        return "person";
-    }
-
+    //==========================用户信息 修改密码 个人中心===========================//
     @RequestMapping("/changePassword/{role}/{id}")
     public String changePassword(ModelMap model,@PathVariable("role") String role,@PathVariable("id") String id,@RequestParam("password")String password,@RequestParam("newpassword")String newpassword){
         if ("admin".equals(role)){
@@ -270,11 +212,30 @@ public class UpdateController {
         return "changePassword";
     }
 
+    @RequestMapping("/person/{role}")
+    public String person(@PathVariable("role") String role, @RequestParam("id") String id ,
+                         @RequestParam("name") String name , @RequestParam("sex") String sex ,
+                         @RequestParam("email") String email , ModelMap model,HttpServletRequest request) throws NoSuchMethodException {
+        String birth = request.getParameter("birth");
+        String phone = request.getParameter("phone");
+        Map<String,String> m=new HashMap();
+        m.put("role",role);
+        m.put("name",name);
+        m.put("id",id);
+        m.put("email",email);
+        m.put("birth",birth);
+        m.put("phone",phone);
+        m.put("sex",sex);
+        Map<String, String> ssm = dtu.savePerson(role, m);
+        model.addAttribute("map",ssm);
+        return "person";
+    }
+
     @RequestMapping("/saveimg/{id}")
-    public String searchMember(ModelMap model,@PathVariable("id") String id,@RequestParam("file") MultipartFile file,HttpServletResponse response,HttpServletRequest request){
+    public String searchMember(ModelMap model,@PathVariable("id") String id,@RequestParam("file") MultipartFile file){
         try {
             String oldFileName="";
-            String newFileName="";
+            String newFileName = "";
             if (!file.isEmpty()) {
                 InputStream inputStream = file.getInputStream();
                 oldFileName = file.getOriginalFilename();
@@ -286,43 +247,26 @@ public class UpdateController {
             Admin byAdmin = selectService.findByAdmin(Integer.parseInt(id));
             Student byStudent = selectService.findByStudent(Integer.parseInt(id));
             Teacher byTeacher = selectService.findByTeacher(Integer.parseInt(id));
-
             if(byAdmin!=null){
                 byAdmin.setAdmin_img("http://"+ftp.getHostname()+"/image/"+newFileName);
                 updateService.updateAdmin(byAdmin);
-                model.addAttribute("img",byAdmin.getAdmin_img());
-                model.addAttribute("id",Integer.parseInt(id));
-                model.addAttribute("name",byAdmin.getAdmin_name());
-                model.addAttribute("sex",byAdmin.getAdmin_sex());
-                model.addAttribute("email",byAdmin.getAdmin_email());
-                model.addAttribute("modelrole","管理员");
+                Map<String, Object> m = dtu.objectToMap(byAdmin, "admin");
+                model.addAttribute("map",m);
             }else if(byStudent!=null){
                 byStudent.setStudent_img("http://"+ftp.getHostname()+"/image/"+newFileName);
                 updateService.updateStudent(byStudent);
-                model.addAttribute("id",Integer.parseInt(id));
-                model.addAttribute("name",byStudent.getStudent_name());
-                model.addAttribute("sex",byStudent.getStudent_sex());
-                model.addAttribute("email",byStudent.getStudent_email());
-                model.addAttribute("birth",byStudent.getStudent_birth());
-                model.addAttribute("phone",byStudent.getStudent_phone());
-                model.addAttribute("img",byStudent.getStudent_img());
-                model.addAttribute("modelrole","学生");
+                Map<String, Object> m = dtu.objectToMap(byStudent, "student");
+                model.addAttribute("map",m);
             }else if(byTeacher!=null){
                 byTeacher.setTeacher_img("http://"+ftp.getHostname()+"/image/"+newFileName);
                 updateService.updateTeacher(byTeacher);
-                model.addAttribute("id",Integer.parseInt(id));
-                model.addAttribute("name",byTeacher.getTeacher_name());
-                model.addAttribute("sex",byTeacher.getTeacher_sex());
-                model.addAttribute("email",byTeacher.getTeacher_email());
-                model.addAttribute("birth",byTeacher.getTeacher_birth());
-                model.addAttribute("phone",byTeacher.getTeacher_phone());
-                model.addAttribute("img",byTeacher.getTeacher_img());
-                model.addAttribute("modelrole","教师");
+                Map<String, Object> m = dtu.objectToMap(byTeacher, "teacher");
+                model.addAttribute("map",m);
             }else{
-                model.addAttribute("message","修改失败");
+                model.addAttribute("message","头像上传失败");
             }
         }catch (Exception e){
-            model.addAttribute("message","修改失败");
+            model.addAttribute("message","头像上传失败");
         }
         return "person";
     }

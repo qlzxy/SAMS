@@ -2,10 +2,6 @@ package com.ly.bean;
 
 import java.io.Serializable;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-10 16:34
- */
 public class Score implements Serializable {
     private int score_id;
     private int  student_id;

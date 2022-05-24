@@ -1,6 +1,5 @@
 package com.ly.controller;
 
-
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
 import com.alibaba.excel.read.builder.ExcelReaderSheetBuilder;
@@ -8,13 +7,11 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.ly.bean.*;
 import com.ly.bean.Class;
-import com.ly.mapper.InsertMapper;
 import com.ly.mapper.SelectMapper;
 import com.ly.service.ExcelListener;
-import com.ly.service.MyUtil;
+import com.ly.utils.EmailUtils;
 import com.ly.service.SelectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-16 15:51
- */
 @Controller
 @RequestMapping("/excel")
 public class ExcelController {
@@ -44,7 +36,7 @@ public class ExcelController {
     @Autowired
     private ExcelListener excelListener;
     @Autowired
-    private MyUtil myUtil;
+    private EmailUtils myUtil;
     //========================导入excel=====================//
     @RequestMapping("/scoreImport")
     public String scoreImport(HttpServletRequest request,Model model, @RequestParam("file") MultipartFile file) {
@@ -127,7 +119,7 @@ public class ExcelController {
             response.setHeader("Content-Disposition","attachment; filename="+format+".xlsx");
             ExcelWriterBuilder write = EasyExcel.write(response.getOutputStream(),StudentScoreCourse.class);
             ExcelWriterSheetBuilder sheet = write.sheet();
-            List list = MyUtil.listByListHashMap(selectMapper.findScore());
+            List list = EmailUtils.listByListHashMap(selectMapper.findScore());
             sheet.doWrite(list);
             return "导出成功";
         }catch (Exception e){

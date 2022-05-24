@@ -1,15 +1,9 @@
 package com.ly.bean;
 
 
-import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-
 import java.io.Serializable;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-10 15:58
- */
 public class Student implements Serializable {
     @ExcelProperty(value = "学生编号",index = 0)
     private int student_id;

@@ -89,8 +89,6 @@ $(function () {
         }
         if(index==6){
             $("#form").submit();
-            // var layer_iframe = parent.layer.getFrameIndex(window.name);
-            // parent.layer.close(layer_iframe);
         }
         index=0;
     });

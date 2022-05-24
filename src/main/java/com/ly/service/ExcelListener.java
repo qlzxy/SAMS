@@ -5,23 +5,13 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.ly.bean.*;
 import com.ly.bean.Class;
 import com.ly.mapper.InsertMapper;
-import com.ly.mapper.SelectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-16 15:42
- */
-@Component
+@Service
 public class ExcelListener extends AnalysisEventListener{
-
-    @Autowired
-    private SelectMapper selectMapper;
-
     @Autowired
     private InsertMapper insertMapper;
-
     @Override
     public void invoke(Object o, AnalysisContext analysisContext) {
         if (o instanceof Student) {
@@ -97,7 +87,6 @@ public class ExcelListener extends AnalysisEventListener{
             }
         }
     }
-
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
 

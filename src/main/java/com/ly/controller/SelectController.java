@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.ly.bean.*;
 import com.ly.bean.Class;
 import com.ly.service.SelectService;
+import com.ly.utils.DataTypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-10 16:51
- */
 @Controller
 @RequestMapping("/select")
 public class SelectController {
@@ -32,6 +31,8 @@ public class SelectController {
     private int pageNum=1;
     @Autowired
     private SelectService selectService;
+    @Autowired
+    private DataTypeUtils dtu;
 
     /**
      * 查询个人成绩
@@ -350,41 +351,19 @@ public class SelectController {
     }
     //==========================个人资料==========================//
     @RequestMapping("/person/{id}")
-    public String person(@PathVariable("id") String id, ModelMap model, HttpServletRequest request,HttpServletResponse response){
+    public String person(@PathVariable("id") String id, ModelMap model, HttpServletRequest request,HttpServletResponse response) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Admin byAdmin = selectService.findByAdmin(Integer.parseInt(id));
         Student byStudent = selectService.findByStudent(Integer.parseInt(id));
         Teacher byTeacher = selectService.findByTeacher(Integer.parseInt(id));
         if(byAdmin!=null){
-            model.addAttribute("id",Integer.parseInt(id));
-            model.addAttribute("name",byAdmin.getAdmin_name());
-            model.addAttribute("sex",byAdmin.getAdmin_sex());
-            model.addAttribute("email",byAdmin.getAdmin_email());
-            model.addAttribute("modelrole","管理员");
-            if(byAdmin.getAdmin_img()!=null&&byAdmin.getAdmin_img()!=""){
-                model.addAttribute("img",byAdmin.getAdmin_img());
-            }
+            Map<String, Object> m = dtu.objectToMap(byAdmin, "admin");
+            model.addAttribute("map",m);
         }else if(byStudent!=null){
-            model.addAttribute("id",Integer.parseInt(id));
-            model.addAttribute("name",byStudent.getStudent_name());
-            model.addAttribute("sex",byStudent.getStudent_sex());
-            model.addAttribute("email",byStudent.getStudent_email());
-            model.addAttribute("birth",byStudent.getStudent_birth());
-            model.addAttribute("phone",byStudent.getStudent_phone());
-            model.addAttribute("modelrole","学生");
-            if(byStudent.getStudent_img()!=null&&byStudent.getStudent_img()!=""){
-                model.addAttribute("img",byStudent.getStudent_img());
-            }
+            Map<String, Object> m = dtu.objectToMap(byStudent, "student");
+            model.addAttribute("map",m);
         }else if(byTeacher!=null){
-            model.addAttribute("id",Integer.parseInt(id));
-            model.addAttribute("name",byTeacher.getTeacher_name());
-            model.addAttribute("sex",byTeacher.getTeacher_sex());
-            model.addAttribute("email",byTeacher.getTeacher_email());
-            model.addAttribute("birth",byTeacher.getTeacher_birth());
-            model.addAttribute("phone",byTeacher.getTeacher_phone());
-            model.addAttribute("modelrole","教师");
-            if(byTeacher.getTeacher_img()!=null&&byTeacher.getTeacher_img()!=""){
-                model.addAttribute("img",byTeacher.getTeacher_img());
-            }
+            Map<String, Object> m = dtu.objectToMap(byTeacher, "teather");
+            model.addAttribute("map",m);
         }
         return "person";
     }

@@ -4,10 +4,6 @@ import com.ly.bean.*;
 import com.ly.bean.Class;
 import org.apache.ibatis.jdbc.SQL;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-14 15:33
- */
 public class UpdateSql {
     public String updateStudent(Student student) {
         return new SQL() {{

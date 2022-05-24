@@ -6,10 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-12 10:51
- */
 @Repository
 @Mapper
 public interface UpdateMapper {

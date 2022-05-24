@@ -27,17 +27,17 @@
 		<div id="body"></div>
 		<div id="body-top">
 		<div id="top">
-			<span id="top-left">学生成绩管理系统</span><span id="top-right"> 
-			<a class="layui-btn  layui-btn-sm" id="return-btn" th:href="@{/main/{id}(id=${id})}">返回主页</a>
+			<span id="top-left">学生成绩管理系统</span><span id="top-right">
+			<a class="layui-btn  layui-btn-sm" id="return-btn" th:href="@{/main/{id}(id=${map['id']})}">返回主页</a>
 			</span>
 		</div>
 		<div id="box">
 			<div id="box-left">
 				<div id="img">
-					<img th:if="${img!=null}" id="img-img" th:src="@{${img}}" />
-					<img th:if="${img==null}" id="img-img" th:src="@{/img/timg.jpg}" />
+					<img th:if="${map['img']!=null}" id="img-img" th:src="@{${map['img']}}" />
+					<img th:if="${map['img']==null}" id="img-img" th:src="@{/img/timg.jpg}" />
 					<input type="button"  id="change-btn" value="修改头像" class="layui-btn layui-btn-sm"/>
-					<form id="form" method="post" th:action="@{/update/saveimg/{id}(id=${id})}" enctype="multipart/form-data">
+					<form id="form" method="post" th:action="@{/update/saveimg/{id}(id=${map['id']})}" enctype="multipart/form-data">
 						<input type="file" name="file" id="change-img" style="display: none"/>
 					</form>
 				</div>
@@ -48,26 +48,26 @@
 				</div>
 				<div id="view">
 					<table >
-						<tr><td>学工号：</td><td>&emsp;</td><td th:text="${id}"></td></tr>
-						<tr><td>姓名：</td><td>&emsp;</td><td th:text="${name}"></td></tr>
-						<tr><td>性别：</td><td>&emsp;</td><td th:text="${sex}"></td></tr>
-						<tr th:if="${session.role ne 'admin'}"><td>出生日期：</td><td>&emsp;</td><td th:text="${birth}"></td></tr>
-						<tr><td>邮箱：</td><td>&emsp;</td><td th:text="${email}"></td></tr>
-						<tr th:if="${session.role ne 'admin'}"><td>电话：</td><td>&emsp;</td><td th:text="${phone}"></td></tr>
-						<tr><td>身份：</td><td>&emsp;</td><td th:text="${modelrole}"></td></tr>
+						<tr><td>学工号：</td><td>&emsp;</td><td th:text="${map['id']}"></td></tr>
+						<tr><td>姓名：</td><td>&emsp;</td><td th:text="${map['name']}"></td></tr>
+						<tr><td>性别：</td><td>&emsp;</td><td th:text="${map['sex']}"></td></tr>
+						<tr th:if="${session.role ne 'admin'}"><td>出生日期：</td><td>&emsp;</td><td th:text="${map['birth']}"></td></tr>
+						<tr><td>邮箱：</td><td>&emsp;</td><td th:text="${map['email']}"></td></tr>
+						<tr th:if="${session.role ne 'admin'}"><td>电话：</td><td>&emsp;</td><td th:text="${map['phone']}"></td></tr>
+						<tr><td>身份：</td><td>&emsp;</td><td th:text="${map['role']}"></td></tr>
 					</table>
 					<input id="view-btn" type="button" class="layui-btn layui-btn-sm" value="修改"/>
 				</div>
 				<div id="edit" style="display: none;">
 					<form method="post" th:action="@{/update/person/{role}(role=${session.role})}">
 					<table >
-						<tr><td>学工号：</td><td>&emsp;</td><td><input name="id" class="layui-input" th:value="${id}" readonly="readonly"/></td></tr>
-						<tr><td>姓名：</td><td>&emsp;</td><td><input name="name" class="layui-input" th:value="${name}"/></td></tr>
-						<tr><td>性别：</td><td>&emsp;</td><td><input name="sex" class="layui-input" th:value="${sex}"/></td></tr>
-						<tr th:if="${session.role ne 'admin'}"><td>出生日期：</td><td>&emsp;</td><td><input name="birth" class="layui-input" th:value="${birth}"/></td></tr>
-						<tr><td>邮箱：</td><td>&emsp;</td><td><input name="email" class="layui-input" th:value="${email}"/></td></tr>
-						<tr th:if="${session.role ne 'admin'}"><td>电话：</td><td>&emsp;</td><td><input name="phone" class="layui-input" th:value="${phone}"/></td></tr>
-						<tr><td>身份：</td><td>&emsp;</td><td><input class="layui-input" th:value="${modelrole}" readonly="readonly"/></td></tr>
+						<tr><td>学工号：</td><td>&emsp;</td><td><input name="id" class="layui-input" th:value="${map['id']}" readonly="readonly"/></td></tr>
+						<tr><td>姓名：</td><td>&emsp;</td><td><input name="name" class="layui-input" th:value="${map['name']}"/></td></tr>
+						<tr><td>性别：</td><td>&emsp;</td><td><input name="sex" class="layui-input" th:value="${map['sex']}"/></td></tr>
+						<tr th:if="${session.role ne 'admin'}"><td>出生日期：</td><td>&emsp;</td><td><input name="birth" class="layui-input" th:value="${map['birth']}"/></td></tr>
+						<tr><td>邮箱：</td><td>&emsp;</td><td><input name="email" class="layui-input" th:value="${map['email']}"/></td></tr>
+						<tr th:if="${session.role ne 'admin'}"><td>电话：</td><td>&emsp;</td><td><input name="phone" class="layui-input" th:value="${map['phone']}"/></td></tr>
+						<tr><td>身份：</td><td>&emsp;</td><td><input class="layui-input" th:value="${map['role']}" readonly="readonly"/></td></tr>
 					</table>
 					<input id="edit-btn" type="submit" class="layui-btn layui-btn-sm"  value="保存"/>
 					</form>
@@ -76,7 +76,7 @@
 		</div>
 			<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
 			<script th:src="@{/layui/layui.js}"></script>
-		<script type="text/javascript">
+			<script type="text/javascript">
 			layui.use('form', function(){
 			  var form = layui.form;
 			  var $ = layui.jquery, layer = layui.layer;

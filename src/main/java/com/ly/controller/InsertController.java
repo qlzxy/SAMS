@@ -14,13 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-11 15:44
- */
 @Controller
 @RequestMapping("/insert")
 public class InsertController {

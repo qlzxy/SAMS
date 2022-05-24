@@ -1,41 +1,52 @@
 package com.ly.service;
 
-import com.ly.bean.Admin;
-import com.ly.bean.Student;
-import com.ly.bean.Teacher;
 import com.ly.mapper.DeleteMapper;
-import com.ly.mapper.SelectMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-10 16:45
- */
 @Service
 public class DeleteService {
     @Autowired
-    private DeleteMapper deleteMapper;
-
+    private DeleteMapper dm;
+    @Autowired
+    private RedisTemplate<String,Object> rt;
     public void deleteScore(int student_id){
-        deleteMapper.deleteScore(student_id);
+        dm.deleteScore(student_id);
+        Set<String> keys = rt.keys("score_*");
+        if (keys.size()>0) {
+            rt.delete(keys);
+        }
     }
     public void deleteStudent(int student_id){
-        deleteMapper.deleteStudent(student_id);
+        dm.deleteStudent(student_id);
+        Set<String> keys = rt.keys("student_*");
+        if (keys.size()>0) {
+            rt.delete(keys);
+        }
     }
     public void deleteTeacher(int teacher_id){
-        deleteMapper.deleteTeacher(teacher_id);
+        dm.deleteTeacher(teacher_id);
+        Set<String> keys = rt.keys("teacher_*");
+        if (keys.size()>0) {
+            rt.delete(keys);
+        }
     }
     public void deleteCourse(int course_id){
-        deleteMapper.deleteCourse(course_id);
+        dm.deleteCourse(course_id);
+        Set<String> keys = rt.keys("average_*");
+        System.out.println(keys);
+        if (keys.size()>0) {
+            rt.delete(keys);
+        }
     }
     public void deleteClass(int class_id){
-        deleteMapper.deleteClass(class_id);
+        dm.deleteClass(class_id);
+        Set<String> keys = rt.keys("class_*");
+        if (keys.size()>0) {
+            rt.delete(keys);
+        }
     }
-
-
 }

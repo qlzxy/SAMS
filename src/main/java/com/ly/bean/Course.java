@@ -1,13 +1,8 @@
 package com.ly.bean;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-
 import java.io.Serializable;
 
-/**
- * @author qlz小羽 SAMS
- * @create 2020-10-12 9:21
- */
 public class Course implements Serializable {
     @ExcelProperty(value = "课程编号",index = 0)
     private int course_id;
